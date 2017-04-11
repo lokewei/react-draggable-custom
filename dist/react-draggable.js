@@ -1048,12 +1048,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        deltaY = _snapToGrid2[1];
 	
 	        if (!deltaX && !deltaY) return; // skip useless drag
-	        var parentScale = _this.props.parentScale;
-	
-	        if (parentScale !== 1) {
-	          deltaX = Math.round(deltaX / parentScale);
-	          deltaY = Math.round(deltaY / parentScale);
-	        }
 	        clientX = _this.state.lastX + deltaX, clientY = _this.state.lastY + deltaY;
 	      }
 	
