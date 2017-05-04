@@ -2,6 +2,7 @@
 import {findInArray, isFunction, isNum, int} from './shims';
 import browserPrefix, {getPrefix, browserPrefixToStyle, browserPrefixToKey} from './getPrefix';
 import ReactDOM from 'react-dom';
+import { snapToGrid, getParentScale } from './positionFns';
 
 import type Draggable from '../Draggable';
 import type DraggableCore from '../DraggableCore';
@@ -162,14 +163,17 @@ export function createCoreEvent(draggable: DraggableCore, clientX: number, clien
 
 // Create an event exposed by <Draggable>
 export function createUIEvent(draggable: Draggable, coreEvent: CoreEvent): UIEvent {
-  const { parentScale = 1 } = draggable.props;
+  const parentScale = getParentScale(draggable);
+  const { grid } = draggable.props;
+  let deltaX = coreEvent.position.deltaX / parentScale , deltaY = coreEvent.position.deltaY / parentScale;
+  [deltaX, deltaY] = snapToGrid(grid, deltaX, deltaY);
   return {
     node: ReactDOM.findDOMNode(draggable),
     position: {
-      left: draggable.state.clientX + coreEvent.position.deltaX / parentScale,
-      top: draggable.state.clientY + coreEvent.position.deltaY / parentScale
+      left: draggable.state.clientX + deltaX,
+      top: draggable.state.clientY + deltaY
     },
-    deltaX: coreEvent.position.deltaX / parentScale,
-    deltaY: coreEvent.position.deltaY / parentScale
+    deltaX,
+    deltaY
   };
 }

@@ -53,6 +53,17 @@ export function getBoundPosition(draggable: Draggable, clientX: number, clientY:
   return [clientX, clientY];
 }
 
+export function getParentScale(draggable: Draggable): number {
+  const node = ReactDOM.findDOMNode(draggable);
+  const parent = node.parentNode
+  let parentScale = 1;
+  if (parent instanceof HTMLElement) {
+    const parentRect = parent.getBoundingClientRect();
+    parentScale = parentRect.width / parent.offsetWidth;
+  }
+  return parentScale;
+}
+
 export function snapToGrid(grid: [number, number], pendingX: number, pendingY: number): [number, number] {
   let x = Math.round(pendingX / grid[0]) * grid[0];
   let y = Math.round(pendingY / grid[1]) * grid[1];

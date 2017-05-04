@@ -213,9 +213,7 @@ export default class DraggableCore extends React.Component {
      */
     className: dontSetMe,
     style: dontSetMe,
-    transform: dontSetMe,
-
-    parentScale: PropTypes.number
+    transform: dontSetMe
   };
 
   static defaultProps = {
@@ -229,8 +227,7 @@ export default class DraggableCore extends React.Component {
     onStart: function(){},
     onDrag: function(){},
     onStop: function(){},
-    onMouseDown: function(){},
-    parentScale: 1
+    onMouseDown: function(){}
   };
 
   state: CoreState = {

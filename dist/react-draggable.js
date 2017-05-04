@@ -401,9 +401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 	  className: _shims.dontSetMe,
 	  style: _shims.dontSetMe,
-	  transform: _shims.dontSetMe,
-	
-	  parentScale: _react.PropTypes.number
+	  transform: _shims.dontSetMe
 	});
 	Draggable.defaultProps = _extends({}, _DraggableCore2.default.defaultProps, {
 	  axis: 'both',
@@ -411,8 +409,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  start: { x: 0, y: 0 },
 	  zIndex: NaN,
 	  x: 0,
-	  y: 0,
-	  parentScale: 1
+	  y: 0
 	});
 	exports.default = Draggable;
 
@@ -492,6 +489,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	exports.matchesSelector = matchesSelector;
@@ -518,6 +517,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _reactDom = __webpack_require__(3);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _positionFns = __webpack_require__(8);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -667,17 +668,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	// Create an event exposed by <Draggable>
 	function createUIEvent(draggable, coreEvent) {
-	  var _draggable$props$pare = draggable.props.parentScale,
-	      parentScale = _draggable$props$pare === undefined ? 1 : _draggable$props$pare;
+	  var parentScale = (0, _positionFns.getParentScale)(draggable);
+	  var grid = draggable.props.grid;
+	
+	  var deltaX = coreEvent.position.deltaX / parentScale,
+	      deltaY = coreEvent.position.deltaY / parentScale;
+	
+	  var _snapToGrid = (0, _positionFns.snapToGrid)(grid, deltaX, deltaY);
+	
+	  var _snapToGrid2 = _slicedToArray(_snapToGrid, 2);
+	
+	  deltaX = _snapToGrid2[0];
+	  deltaY = _snapToGrid2[1];
 	
 	  return {
 	    node: _reactDom2.default.findDOMNode(draggable),
 	    position: {
-	      left: draggable.state.clientX + coreEvent.position.deltaX / parentScale,
-	      top: draggable.state.clientY + coreEvent.position.deltaY / parentScale
+	      left: draggable.state.clientX + deltaX,
+	      top: draggable.state.clientY + deltaY
 	    },
-	    deltaX: coreEvent.position.deltaX / parentScale,
-	    deltaY: coreEvent.position.deltaY / parentScale
+	    deltaX: deltaX,
+	    deltaY: deltaY
 	  };
 	}
 
@@ -792,6 +803,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	exports.getBoundPosition = getBoundPosition;
+	exports.getParentScale = getParentScale;
 	exports.snapToGrid = snapToGrid;
 	exports.canDragX = canDragX;
 	exports.canDragY = canDragY;
@@ -849,6 +861,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if ((0, _shims.isNum)(bounds.top)) clientY = Math.max(clientY, bounds.top);
 	
 	  return [clientX, clientY];
+	}
+	
+	function getParentScale(draggable) {
+	  var node = _reactDom2.default.findDOMNode(draggable);
+	  var parent = node.parentNode;
+	  var parentScale = 1;
+	  if (parent instanceof HTMLElement) {
+	    var parentRect = parent.getBoundingClientRect();
+	    parentScale = parentRect.width / parent.offsetWidth;
+	  }
+	  return parentScale;
 	}
 	
 	function snapToGrid(grid, pendingX, pendingY) {
@@ -1351,9 +1374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 	  className: _shims.dontSetMe,
 	  style: _shims.dontSetMe,
-	  transform: _shims.dontSetMe,
-	
-	  parentScale: _react.PropTypes.number
+	  transform: _shims.dontSetMe
 	};
 	DraggableCore.defaultProps = {
 	  allowAnyClick: false, // by default only accept left click
@@ -1366,8 +1387,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onStart: function onStart() {},
 	  onDrag: function onDrag() {},
 	  onStop: function onStop() {},
-	  onMouseDown: function onMouseDown() {},
-	  parentScale: 1
+	  onMouseDown: function onMouseDown() {}
 	};
 	exports.default = DraggableCore;
 

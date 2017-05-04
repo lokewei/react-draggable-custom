@@ -129,9 +129,7 @@ export default class Draggable extends React.Component {
      */
     className: dontSetMe,
     style: dontSetMe,
-    transform: dontSetMe,
-
-    parentScale: PropTypes.number
+    transform: dontSetMe
   };
 
   static defaultProps = {
@@ -141,8 +139,7 @@ export default class Draggable extends React.Component {
     start: {x: 0, y: 0},
     zIndex: NaN,
     x: 0,
-    y: 0,
-    parentScale: 1
+    y: 0
   };
 
   state: DraggableState = {
